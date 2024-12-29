@@ -2,8 +2,19 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['your-backend.com', 'res.cloudinary.com'], // Add the hostname of your image source
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "your-backend.com",
+        pathname: "/**", // Match all paths from this hostname
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**", // Match all paths from this hostname
+      },
+    ],
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
