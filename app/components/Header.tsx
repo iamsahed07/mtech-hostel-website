@@ -88,6 +88,13 @@ export default function Header() {
             >
               Chess Competition
             </Link>
+             <Link
+              href="#alumni"
+              onClick={() => setMenuOpen(false)}
+              className="text-white text-lg transition-transform transform hover:scale-110 hover:text-yellow-400"
+            >
+              Alumni
+            </Link>
           </nav>
         </div>
       )}
