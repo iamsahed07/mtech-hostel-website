@@ -5,8 +5,12 @@ import { motion } from "framer-motion";
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isBrowser, setIsBrowser] = useState(false);
 
   useEffect(() => {
+    // Ensure this runs only in the browser
+    setIsBrowser(typeof window !== "undefined");
+
     const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({
         x: event.clientX,
@@ -14,27 +18,35 @@ export default function Hero() {
       });
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    if (isBrowser) {
+      window.addEventListener("mousemove", handleMouseMove);
+    }
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      if (isBrowser) {
+        window.removeEventListener("mousemove", handleMouseMove);
+      }
     };
-  }, []);
+  }, [isBrowser]);
 
   return (
     <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 min-h-[70vh] flex items-center justify-center overflow-hidden">
       {/* Flying Eagle Animation with 3D Follow Cursor Effect */}
-      <motion.img
-        src="https://res.cloudinary.com/dhavdc5dx/image/upload/v1735481833/new_logo_2_womtcl.png"
-        alt="Eagle Logo"
-        className="absolute z-0"
-        style={{
-          transform: `translate(-50%, -50%) rotateX(${(mousePosition.y - window.innerHeight / 2) / 10}deg) rotateY(${(mousePosition.x - window.innerWidth / 2) / 10}deg) scale(1.2)`,
-          opacity: 0.2,
-          left: "50%",
-          top: "50%",
-        }}
-      />
+      {isBrowser && (
+        <motion.img
+          src="https://res.cloudinary.com/dhavdc5dx/image/upload/v1735481833/new_logo_2_womtcl.png"
+          alt="Eagle Logo"
+          className="absolute z-0"
+          style={{
+            transform: `translate(-50%, -50%) rotateX(${
+              (mousePosition.y - window.innerHeight / 2) / 10
+            }deg) rotateY(${(mousePosition.x - window.innerWidth / 2) / 10}deg) scale(1.2)`,
+            opacity: 0.2,
+            left: "50%",
+            top: "50%",
+          }}
+        />
+      )}
 
       {/* Welcome Text */}
       <motion.h1
