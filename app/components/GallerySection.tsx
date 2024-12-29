@@ -15,6 +15,7 @@ export default function FancyGallerySection({ id, title, images }: GallerySectio
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isClient, setIsClient] = useState(false);  // Track if the code is running on the client side
 
   const openPreview = (index: number) => {
     setCurrentIndex(index);
@@ -53,11 +54,20 @@ export default function FancyGallerySection({ id, title, images }: GallerySectio
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    // Only add event listener on the client side
+    if (typeof window !== "undefined") {
+      setIsClient(true);  // Ensure we're on the client-side before adding the event listener
+      window.addEventListener("keydown", handleKeyDown);
+      
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
   }, [isPreviewOpen]);
+
+  if (!isClient) {
+    return null;  // Return nothing if on the server-side
+  }
 
   return (
     <section id={id} className="py-16 px-6 sm:px-12 bg-gradient-to-b from-gray-50 to-gray-100">
